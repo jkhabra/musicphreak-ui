@@ -1,0 +1,67 @@
+.player {
+  background: #21242e;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
+  height: 70px;
+  width: 100%;
+  z-index: 2;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid #52aef5;
+}
+
+.thumb-nail {
+  width: 6em;
+  padding: 10px;
+  margin-left: 20px;
+}
+
+.player-thumb {
+  width: 100%;
+  height: 3em;
+}
+
+.some-stuff {
+  width: 220px;
+}
+
+.name-stuff {
+  color: #fff;
+}
+
+.play-button {
+  display: flex;
+  align-items: center;
+  width: 8em;
+}
+
+.icon {
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.play-icon {
+  background-image: url("../TrackTile/images/pause.svg");
+  background-color: #fff;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+
+.f-icon {
+  background-image: url("skip.svg");
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: 7px;
+}
+
+.b-icon {
+  background-image: url("previous.svg");
+  margin-right: 7px;
+}
+
+.play-time {
+  color: #fff;
+}
