@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TrackTile from "../TrackTile";
+import AudioPlayer from "../AudioPlayer";
 import "./style.css";
 
 class App extends Component {
@@ -33,9 +34,6 @@ class App extends Component {
     let url = song.url["48"];
 
     if (this.state.playingSongId === song.songId) {
-      console.log("here");
-      window.aaa = this.audio;
-
       this.audio.pause();
 
       this.setState({
@@ -44,6 +42,7 @@ class App extends Component {
     } else {
       this.audio.src = url;
       this.audio.play().catch(err => console.warn("Play interrupted.", err));
+      window.t = this.audio.duration;
 
       this.setState({
         playingSongId: song.songId
@@ -52,7 +51,12 @@ class App extends Component {
   };
 
   render() {
-    var songs = this.state.songs;
+    const songs = this.state.songs;
+    const playingSong = !this.state.playingSongId
+      ? null
+      : this.state.songs.find(i => {
+          return i.songId === this.state.playingSongId;
+        });
 
     return (
       <div className="app-container">
@@ -63,6 +67,10 @@ class App extends Component {
           <div className="search-bar">
             <input className="search-input" type="text" name="search" />
           </div>
+        </div>
+
+        <div className="audio-player">
+          <AudioPlayer song={playingSong} />
         </div>
 
         <div className="side-bar">
