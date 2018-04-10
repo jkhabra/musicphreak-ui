@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import "./style.css";
 
 class AudioPlayer extends Component {
+  handlePlay = () => {
+    const song = this.props.song;
+    this.props.onPlay(song);
+  };
+
   render() {
     const song = this.props.song;
+    const isPlaying = this.props.isPlaying;
 
     if (!song) {
       return null;
@@ -21,7 +27,10 @@ class AudioPlayer extends Component {
 
         <div className="play-button">
           <div className="f-icon b-icon icon" />
-          <div className="play-icon" />
+          <div
+            className={isPlaying ? "play-icon" : "paused"}
+            onClick={this.handlePlay}
+          />
           <div className="f-icon icon" />
         </div>
 

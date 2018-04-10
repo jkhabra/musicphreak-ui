@@ -39,15 +39,22 @@
 .icon {
   background-repeat: no-repeat;
   background-size: contain;
+  cursor: pointer;
 }
 
-.play-icon {
+.play-icon,
+.paused {
   background-image: url("../TrackTile/images/pause.svg");
   background-color: #fff;
   width: 2em;
   height: 2em;
   border-radius: 50%;
   border: 1px solid #fff;
+  cursor: pointer;
+}
+
+.paused {
+  background-image: url("../TrackTile/images/play.svg");
 }
 
 .f-icon {

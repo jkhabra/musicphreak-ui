@@ -1,18 +1,24 @@
 import React, { Component } from "react";
 import TrackTile from "../TrackTile";
 import AudioPlayer from "../AudioPlayer";
+import SideBar from "../SideBar";
 import "./style.css";
 
 class App extends Component {
   state = {
     songs: [],
-    playingSongId: null
+    activeSong: null,
+    isPlaying: false
   };
 
   audio = new Audio();
 
   componentWillMount = () => {
     this.getData();
+  };
+
+  getSongData = (song, staus) => {
+    this.setState({ activeSong: song, isPlaying: staus });
   };
 
   getData = () => {
@@ -30,33 +36,13 @@ class App extends Component {
       });
   };
 
-  handlePlaySong = song => {
-    let url = song.url["48"];
-
-    if (this.state.playingSongId === song.songId) {
-      this.audio.pause();
-
-      this.setState({
-        playingSongId: null
-      });
-    } else {
-      this.audio.src = url;
-      this.audio.play().catch(err => console.warn("Play interrupted.", err));
-      window.t = this.audio.duration;
-
-      this.setState({
-        playingSongId: song.songId
-      });
-    }
-  };
-
   render() {
     const songs = this.state.songs;
-    const playingSong = !this.state.playingSongId
-      ? null
-      : this.state.songs.find(i => {
-          return i.songId === this.state.playingSongId;
-        });
+    //const playingSong = !this.state.playingSongId
+    //? null
+    //: this.state.songs.find(i => {
+    //   return i.songId === this.state.playingSongId;
+    // });
 
     return (
       <div className="app-container">
@@ -70,50 +56,11 @@ class App extends Component {
         </div>
 
         <div className="audio-player">
-          <AudioPlayer song={playingSong} />
+          <AudioPlayer onPlay={this.handlePlaySong} />
         </div>
 
         <div className="side-bar">
-          <div className="browse-section">
-            <ul className="main-links">
-              <li className="main-title">Browse</li>
-              <li className="main-item">
-                <a className="main-link home" href="/">
-                  Home
-                </a>
-              </li>
-              <li className="main-item">
-                <a className="main-link" href="#palylists">
-                  Playlists
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div className="my-music">
-            <ul className="main-links">
-              <li className="main-title my">My music</li>
-              <li className="my-item">
-                <a className="main-link my" href="/">
-                  Albums
-                </a>
-              </li>
-              <li className="my-item">
-                <a className="main-link my" href="#palylists">
-                  Artists
-                </a>
-              </li>
-              <li className="my-item">
-                <a className="main-link my" href="#palylists">
-                  Songs
-                </a>
-              </li>
-              <li className="my-item">
-                <a className="main-link my" href="#palylists">
-                  Genres
-                </a>
-              </li>
-            </ul>
-          </div>
+          <SideBar />
         </div>
         <div className="container-div">
           <div className="popular">
@@ -125,8 +72,10 @@ class App extends Component {
                 <TrackTile
                   key={song.songId}
                   song={song}
-                  isPlaying={song.songId === this.state.playingSongId}
-                  onPlay={this.handlePlaySong}
+                  currentSong={this.state.activeSong}
+                  audio={this.audio}
+                  isPlaying={this.state.isPlaying}
+                  handlingSong={this.getSongData}
                 />
               );
             })}

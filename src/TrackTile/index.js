@@ -2,10 +2,27 @@ import React, { Component } from "react";
 import "./style.css";
 
 class TrackTile extends Component {
-  handlePlay = () => {
-    const song = this.props.song;
+  playSong = url => {
+    this.props.audio.src = url;
+    this.props.audio
+      .play()
+      .catch(err => console.warn("Play interrupted.", err));
+  };
 
-    this.props.onPlay(song);
+  handlePlaySong = song => {
+    const s = this.props.song;
+    let url = s.url["48"];
+
+    if (this.props.currentSong === null) {
+      this.playSong(url);
+      this.props.handlingSong(s, true);
+    } else if (this.props.currentSong.songId === s.songId) {
+      this.props.audio.pause();
+      this.props.handlingSong(null, false);
+    } else {
+      this.playSong(url);
+      this.props.handlingSong(s, true);
+    }
   };
 
   render() {
@@ -21,7 +38,7 @@ class TrackTile extends Component {
         <div className="artist">{song.artist.name}</div>
         <div
           className={isPlaying ? "pause" : "play"}
-          onClick={this.handlePlay}
+          onClick={this.handlePlaySong}
         />
         <div className="option" />
       </div>
