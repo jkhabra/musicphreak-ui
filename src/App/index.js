@@ -8,7 +8,8 @@ class App extends Component {
   state = {
     songs: [],
     activeSong: null,
-    isPlaying: false
+    isPaused: false,
+    isLoadingSong: false
   };
 
   audio = new Audio();
@@ -17,8 +18,26 @@ class App extends Component {
     this.getData();
   };
 
-  getSongData = (song, staus) => {
-    this.setState({ activeSong: song, isPlaying: staus });
+  handlePlay = song => {
+    this.setState({ activeSong: song });
+
+    this.playSong(song.url["48"]);
+  };
+
+  playSong = url => {
+    this.audio.src = url;
+
+    this.setState({ isLoadingSong: true });
+
+    this.audio
+      .play()
+      .then(() => {
+        this.setState({ isLoadingSong: false });
+      })
+      .catch(err => {
+        console.warn("Play interrupted.", err);
+        this.setState({ isLoadingSong: false });
+      });
   };
 
   getData = () => {
@@ -38,11 +57,8 @@ class App extends Component {
 
   render() {
     const songs = this.state.songs;
-    //const playingSong = !this.state.playingSongId
-    //? null
-    //: this.state.songs.find(i => {
-    //   return i.songId === this.state.playingSongId;
-    // });
+    const playingSong = this.state.activeSong;
+    const isLoading = this.state.isLoadingSong;
 
     return (
       <div className="app-container">
@@ -56,26 +72,37 @@ class App extends Component {
         </div>
 
         <div className="audio-player">
-          <AudioPlayer onPlay={this.handlePlaySong} />
+          <AudioPlayer song={playingSong} />
         </div>
 
         <div className="side-bar">
           <SideBar />
         </div>
+
         <div className="container-div">
           <div className="popular">
             <h2>Popular Songs</h2>
           </div>
           <div className="song-container">
+            {isLoading ? (
+              <div class="lds-ellipsis">
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            ) : null}
             {songs.map((song, index) => {
               return (
                 <TrackTile
                   key={song.songId}
                   song={song}
-                  currentSong={this.state.activeSong}
-                  audio={this.audio}
-                  isPlaying={this.state.isPlaying}
-                  handlingSong={this.getSongData}
+                  isPlaying={
+                    this.state.activeSong
+                      ? this.state.activeSong.id === song.songId
+                      : false
+                  }
+                  onPlay={this.handlePlay}
                 />
               );
             })}

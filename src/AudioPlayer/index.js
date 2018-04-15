@@ -3,13 +3,12 @@ import "./style.css";
 
 class AudioPlayer extends Component {
   handlePlay = () => {
-    const song = this.props.song;
-    this.props.onPlay(song);
+    this.props.onPlay(this.props.song);
   };
 
   render() {
     const song = this.props.song;
-    const isPlaying = this.props.isPlaying;
+    const isPlaying = this.props.song;
 
     if (!song) {
       return null;

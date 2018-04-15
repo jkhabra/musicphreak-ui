@@ -1,28 +1,16 @@
 import React, { Component } from "react";
+import T from "prop-types";
 import "./style.css";
 
 class TrackTile extends Component {
-  playSong = url => {
-    this.props.audio.src = url;
-    this.props.audio
-      .play()
-      .catch(err => console.warn("Play interrupted.", err));
+  static propTypes = {
+    song: T.object.isRequired,
+    isPlaying: T.bool.isRequired,
+    onPlay: T.func.isRequired
   };
 
-  handlePlaySong = song => {
-    const s = this.props.song;
-    let url = s.url["48"];
-
-    if (this.props.currentSong === null) {
-      this.playSong(url);
-      this.props.handlingSong(s, true);
-    } else if (this.props.currentSong.songId === s.songId) {
-      this.props.audio.pause();
-      this.props.handlingSong(null, false);
-    } else {
-      this.playSong(url);
-      this.props.handlingSong(s, true);
-    }
+  handlePlaySong = () => {
+    this.props.onPlay(this.props.song);
   };
 
   render() {
