@@ -21,7 +21,8 @@ class App extends Component {
   handlePlay = song => {
     this.setState({ activeSong: song });
 
-    this.playSong(song.url["48"]);
+    this.playSong(song.urls);
+    this.pauseSong(song.urls);
   };
 
   playSong = url => {
@@ -32,7 +33,7 @@ class App extends Component {
     this.audio
       .play()
       .then(() => {
-        this.setState({ isLoadingSong: false });
+        this.setState({ isLoadingSong: false, isPaused: true });
       })
       .catch(err => {
         console.warn("Play interrupted.", err);
@@ -40,14 +41,28 @@ class App extends Component {
       });
   };
 
+  pauseSong = url => {
+    this.audio.src = url;
+
+    if(this.state.isPaused){
+      this.audio
+      .paused()
+      .then(() => {
+        this.setState({ isPaused: false });
+      })
+      .catch(err => {
+        console.warn("Pause interrupted.", err);
+      });
+    }
+  };
+
   getData = () => {
-    const url = "http://localhost:5000/api/songs?skip=0&limit=20";
+    const url = "http://localhost:5000/songs";
 
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        const songs = res.data;
-
+        const songs = res.songs;
         this.setState({ songs: songs });
       })
       .catch(err => {
@@ -59,7 +74,6 @@ class App extends Component {
     const songs = this.state.songs;
     const playingSong = this.state.activeSong;
     const isLoading = this.state.isLoadingSong;
-
     return (
       <div className="app-container">
         <div className="nav-bar">
@@ -72,7 +86,10 @@ class App extends Component {
         </div>
 
         <div className="audio-player">
-          <AudioPlayer song={playingSong} />
+          <AudioPlayer
+            song={playingSong}
+            onPlay={this.handlePlay}
+          />
         </div>
 
         <div className="side-bar">
@@ -85,21 +102,19 @@ class App extends Component {
           </div>
           <div className="song-container">
             {isLoading ? (
-              <div class="lds-ellipsis">
-                <div />
-                <div />
-                <div />
-                <div />
+              <div className="lds-ripple">
+                <div></div>
+                <div></div>
               </div>
             ) : null}
             {songs.map((song, index) => {
               return (
                 <TrackTile
-                  key={song.songId}
+                  key={song.id}
                   song={song}
                   isPlaying={
                     this.state.activeSong
-                      ? this.state.activeSong.id === song.songId
+                      ? this.state.activeSong.id === song.id
                       : false
                   }
                   onPlay={this.handlePlay}

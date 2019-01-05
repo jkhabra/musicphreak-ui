@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class SideBar extends Component {
   render() {
     return (
-      <div>
+      <div className="side-bar">
         <div className="browse-section">
           <ul className="main-links">
             <li className="main-title">Browse</li>

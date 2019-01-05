@@ -21,7 +21,7 @@ class AudioPlayer extends Component {
         </div>
         <div className="some-stuff">
           <div className="name-stuff">{song.name}</div>
-          <div className="name-stuff">{song.artist.name}</div>
+          <div className="name-stuff">{song.artistname}</div>
         </div>
 
         <div className="play-button">

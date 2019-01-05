@@ -23,7 +23,7 @@ class TrackTile extends Component {
           <img className="song-art" src={song.thumb} alt="song' thumb nail" />
         </div>
         <div className="title">{song.name}</div>
-        <div className="artist">{song.artist.name}</div>
+        <div className="artist">{song.artistname}</div>
         <div
           className={isPlaying ? "pause" : "play"}
           onClick={this.handlePlaySong}
